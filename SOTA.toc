@@ -1,4 +1,4 @@
-## Title: SOTA - State of the Art (Experemental version by Wht Mst (Misha))
+## Title: SOTA - State of the Art (Experimental version by Wht Mst (Misha))
 ## Version: 1.18
 ## Author: Mimma @ VanillaGaming.org
 ## Interface: 11200
