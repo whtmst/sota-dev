@@ -1313,11 +1313,7 @@ end
 
 
 function SOTA_OnEvent(event, arg1, arg2, arg3, arg4, arg5)
-	if (event == "ADDON_LOADED") then
-		if arg1 == SOTA_TITLE then
-		    SOTA_InitializeConfigSettings();
-		end
-	elseif (event == "CHAT_MSG_GUILD") then
+	if (event == "CHAT_MSG_GUILD") then
 		SOTA_HandleGuildChatMessage(event, arg1, arg2, arg3, arg4, arg5);
 	elseif (event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER") then
 		SOTA_HandleRaidChatMessage(event, arg1, arg2, arg3, arg4, arg5);
@@ -1366,6 +1362,7 @@ function SOTA_OnLoad()
 	SOTA_CONFIG_Modified = false;
 
 	SOTA_InitializeTextElements();
+	SOTA_InitializeConfigSettings();
 end
 
 
