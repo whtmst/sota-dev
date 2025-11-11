@@ -1313,7 +1313,9 @@ end
 
 
 function SOTA_OnEvent(event, arg1, arg2, arg3, arg4, arg5)
-	if (event == "CHAT_MSG_GUILD") then
+	if (event == "VARIABLES_LOADED") then
+		SOTA_InitializeConfigSettings();
+	elseif (event == "CHAT_MSG_GUILD") then
 		SOTA_HandleGuildChatMessage(event, arg1, arg2, arg3, arg4, arg5);
 	elseif (event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER") then
 		SOTA_HandleRaidChatMessage(event, arg1, arg2, arg3, arg4, arg5);
@@ -1331,7 +1333,7 @@ end
 function SOTA_OnLoad()
 	localEcho(string.format("Loot Distribution Addon version %s by %s", GetAddOnMetadata("SOTA", "Version"), GetAddOnMetadata("SOTA", "Author")));
     
-	this:RegisterEvent("ADDON_LOADED");
+	this:RegisterEvent("VARIABLES_LOADED");
 	this:RegisterEvent("GUILD_ROSTER_UPDATE");
 	this:RegisterEvent("RAID_ROSTER_UPDATE");
 	this:RegisterEvent("CHAT_MSG_GUILD");
@@ -1362,7 +1364,6 @@ function SOTA_OnLoad()
 	SOTA_CONFIG_Modified = false;
 
 	SOTA_InitializeTextElements();
-	SOTA_InitializeConfigSettings();
 end
 
 
