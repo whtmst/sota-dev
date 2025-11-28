@@ -85,6 +85,7 @@ SOTA_MSG_On8SecondsLeft		= "On8SecondsLeft";
 SOTA_MSG_On7SecondsLeft		= "On7SecondsLeft";
 SOTA_MSG_On6SecondsLeft		= "On6SecondsLeft";
 SOTA_MSG_On5SecondsLeft		= "On5SecondsLeft";
+SOTA_MSG_On5SecondsLeftNoBid		= "On5SecondsLeftNoBid";
 SOTA_MSG_On4SecondsLeft		= "On4SecondsLeft";
 SOTA_MSG_On3SecondsLeft		= "On3SecondsLeft";
 SOTA_MSG_On2SecondsLeft		= "On2SecondsLeft";
@@ -116,12 +117,12 @@ SOTA_MSG_OnDKPReplaced		= "OnDKPReplaced";
 
 --	Settings (persisted)
 -- Pane 1:
-SOTA_CONFIG_AuctionTime			= 20
-SOTA_CONFIG_AuctionExtension	= 8
+SOTA_CONFIG_AuctionTime			= 30
+SOTA_CONFIG_AuctionExtension	= 15
 SOTA_CONFIG_EnableOSBidding		= 1;	-- Enable MS bidding over OS
 SOTA_CONFIG_EnableZoneCheck		= 1;	-- Enable zone check when doing raid queue DKP
 SOTA_CONFIG_EnableOnlineCheck	= 1;	-- Enable online check when doing raid queue DKP
-SOTA_CONFIG_AllowPlayerPass     = 1;	-- 0: No pass, 1: can pass latest bid
+SOTA_CONFIG_AllowPlayerPass     = 0;	-- 0: No pass, 1: can pass latest bid
 SOTA_CONFIG_DisableDashboard	= 0;	-- Disable Dashboard in UI (hide it)
 SOTA_CONFIG_OutputChannel		= WARN_CHANNEL;
 SOTA_CONFIG_Messages			= { }	-- Contains configurable raid messages (if any)
@@ -132,18 +133,18 @@ SOTA_CONFIG_VersionDate			= nil;	-- Date of last change!
 -- Pane 2:
 SOTA_CONFIG_BossDKP				= { }
 local SOTA_CONFIG_DEFAULT_BossDKP = {
-	{ "20Mans",			200 },
+	{ "20Mans",			400 },
 	{ "MoltenCore",		600 },
 	{ "Onyxia",			600 },
 	{ "BlackwingLair",	600 },
-	{ "AQ40",			800 },
-	{ "Naxxramas",		1200 },
+	{ "AQ40",			600 },
+	{ "Naxxramas",		600 },
 	{ "WorldBosses",	400 }
 }
 -- Pane 3:
 SOTA_CONFIG_Modified			= false;	-- If TRUE, then config number has been updated; FALSE: not.
 SOTA_CONFIG_UseGuildNotes		= 0;
-SOTA_CONFIG_MinimumBidStrategy	= 1;	-- 0: No strategy, 1: +10 DKP, 2: +10 %, 3: GGC rules, 4: DejaVu rules, 5: Custom rules
+SOTA_CONFIG_MinimumBidStrategy	= 3;	-- 0: No strategy, 1: +10 DKP, 2: +10 %, 3: GGC rules, 4: DejaVu rules, 5: Custom rules
 SOTA_CONFIG_DKPStringLength		= 5;
 SOTA_CONFIG_MinimumDKPPenalty	= 50;	-- Minimum DKP withdrawn when doing percent DKP
 -- History: (basically a copy of the transaction log, but not shared with others)
@@ -1034,14 +1035,15 @@ end
 
 
 function SOTA_ShareBossDKP()
-	local bossDkp = "".. (SOTA_GetMinimumBid() * 10);
+	-- local bossDkp = "".. (SOTA_GetMinimumBid() * 10);
 	
 	if SOTA_CanDoDKP(true) then		
 		StaticPopupDialogs["SOTA_POPUP_SHARE_DKP"] = {
-			text = "Share the following DKP across raid:",
+			-- text = "Share the following DKP across raid:",
+			text = "Add the following DKP to raid:",
 			hasEditBox = true,
 			maxLetters = 6,
-			button1 = "Share",
+			button1 = "Add",
 			button2 = "Cancel",
 			OnAccept = function() SOTA_ExcludePlayerFromTransaction(SOTA_selectedTransactionID, playername)  end,
 			timeout = 0,
@@ -1050,7 +1052,9 @@ function SOTA_ShareBossDKP()
 			preferredIndex = 3,			
 			OnShow = function()	
 				local c = getglobal(this:GetName().."EditBox");
-				c:SetText(bossDkp);
+				-- c:SetText(bossDkp);
+				c:SetText("");
+				c:SetFocus();
 			end,
 			OnAccept = function(self, data)
 				local c = getglobal(this:GetParent():GetName().."EditBox");			
@@ -1064,7 +1068,8 @@ end
 function SOTA_ShareSelectedBossDKP(text)
 	local dkp = tonumber(text);
 	if dkp then
-		SOTA_Call_ShareDKP(dkp);
+		-- SOTA_Call_ShareDKP(dkp);
+		SOTA_Call_AddRaidDKP(dkp);
 	end
 end
 

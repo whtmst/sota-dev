@@ -37,8 +37,8 @@
 				</Backdrop>
 				<!-- "buttons" -->
 				<Frames>
-					<!-- Button 1A: Raid Queue ("Prayer of Spirit") -->
-					<Button name="$parentShareDKPButton" inherits="ActionButtonTemplate" frameStrata="HIGH" hidden="false">
+					<!-- Button 1: Выбор мастер лутера ("Kings") -->
+					<Button name="$parentConfigurationButton" inherits="ActionButtonTemplate" frameStrata="HIGH" hidden="false">
 						<Size>
 							<AbsDimension x="32" y="32" />
 						</Size>
@@ -49,21 +49,21 @@
 								</Offset>
 							</Anchor>
 						</Anchors>
-						<NormalTexture file="Interface\ICONS\Spell_Holy_PrayerOfSpirit.blp" />
-						<PushedTexture file="Interface\ICONS\Spell_Holy_DivineSpirit.blp" />
+						<NormalTexture file="Interface\ICONS\Spell_Magic_Magearmor.blp" />
+						<PushedTexture file="Interface\ICONS\Spell_Magic_GreaterBlessingOfKings.blp" />
 						<Scripts>
 							<OnClick>
-								SOTA_OpenRaidQueueUI();
+								SOTA_RequestSOTAMaster();
 							</OnClick>
 							<OnEnter>
-								SOTA_ShowDashboardToolTip(this, "Open Raid Queue");
+								SOTA_ShowDashboardToolTip(this, "Request SOTA Master status");
 							</OnEnter>
 							<OnLeave>
 								SOTA_HideDashboardToolTip(this);
 							</OnLeave>
 						</Scripts>
 					</Button>
-					<!-- Button 2A: Transaction Log ("Note") -->
+					<!-- Button 2: Логи транзакций ("Note") -->
 					<Button name="$parentTransactionLogButton" inherits="ActionButtonTemplate" frameStrata="HIGH" hidden="false">
 						<Size>
 							<AbsDimension x="32" y="32" />
@@ -89,8 +89,8 @@
 							</OnLeave>
 						</Scripts>
 					</Button>
-					<!-- Button 3A: Configuration ("Gear") -->
-					<Button name="$parentConfigurationButton" inherits="ActionButtonTemplate" frameStrata="HIGH" hidden="false">
+					<!-- Button 3: Раздать ДКП ("Coins") -->
+					<Button name="$parentShareDKPButton" inherits="ActionButtonTemplate" frameStrata="HIGH" hidden="false">
 						<Size>
 							<AbsDimension x="32" y="32" />
 						</Size>
@@ -98,6 +98,58 @@
 							<Anchor point="LEFT">
 								<Offset>
 									<AbsDimension x="80" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<NormalTexture file="Interface\ICONS\INV_Misc_Coin_04.blp" />
+						<PushedTexture file="Interface\ICONS\INV_Misc_Coin_02.blp" />
+						<Scripts>
+							<OnClick>
+								SOTA_ShareBossDKP();
+							</OnClick>
+							<OnEnter>
+								SOTA_ShowDashboardToolTip(this, "Add DKP across Raid and Queue");
+							</OnEnter>
+							<OnLeave>
+								SOTA_HideDashboardToolTip(this);
+							</OnLeave>
+						</Scripts>
+					</Button>
+					<!-- Button 4: Рейд очередь ("Prayer of Spirit") -->
+					<Button name="$parentShareDKPButton" inherits="ActionButtonTemplate" frameStrata="HIGH" hidden="false">
+						<Size>
+							<AbsDimension x="32" y="32" />
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT">
+								<Offset>
+									<AbsDimension x="220" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<NormalTexture file="Interface\ICONS\Spell_Holy_PrayerOfSpirit.blp" />
+						<PushedTexture file="Interface\ICONS\Spell_Holy_DivineSpirit.blp" />
+						<Scripts>
+							<OnClick>
+								SOTA_OpenRaidQueueUI();
+							</OnClick>
+							<OnEnter>
+								SOTA_ShowDashboardToolTip(this, "Open Raid Queue");
+							</OnEnter>
+							<OnLeave>
+								SOTA_HideDashboardToolTip(this);
+							</OnLeave>
+						</Scripts>
+					</Button>
+					<!-- Button 5: Настройки ("Gear") -->
+					<Button name="$parentConfigurationButton" inherits="ActionButtonTemplate" frameStrata="HIGH" hidden="false">
+						<Size>
+							<AbsDimension x="32" y="32" />
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT">
+								<Offset>
+									<AbsDimension x="260" y="0" />
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -115,63 +167,10 @@
 							</OnLeave>
 						</Scripts>
 					</Button>
-					<!-- Button 1B: Make Master ("Kings") -->
-					<Button name="$parentConfigurationButton" inherits="ActionButtonTemplate" frameStrata="HIGH" hidden="false">
-						<Size>
-							<AbsDimension x="32" y="32" />
-						</Size>
-						<Anchors>
-							<Anchor point="LEFT">
-								<Offset>
-									<AbsDimension x="220" y="0" />
-								</Offset>
-							</Anchor>
-						</Anchors>
-						<NormalTexture file="Interface\ICONS\Spell_Magic_Magearmor.blp" />
-						<PushedTexture file="Interface\ICONS\Spell_Magic_GreaterBlessingOfKings.blp" />
-						<Scripts>
-							<OnClick>
-								SOTA_RequestSOTAMaster();
-							</OnClick>
-							<OnEnter>
-								SOTA_ShowDashboardToolTip(this, "Request SOTA Master status");
-							</OnEnter>
-							<OnLeave>
-								SOTA_HideDashboardToolTip(this);
-							</OnLeave>
-						</Scripts>
-					</Button>
-					<!-- Button 2B: Share DKP ("Coins") -->
-					<Button name="$parentShareDKPButton" inherits="ActionButtonTemplate" frameStrata="HIGH" hidden="false">
-						<Size>
-							<AbsDimension x="32" y="32" />
-						</Size>
-						<Anchors>
-							<Anchor point="LEFT">
-								<Offset>
-									<AbsDimension x="260" y="0" />
-								</Offset>
-							</Anchor>
-						</Anchors>
-						<NormalTexture file="Interface\ICONS\INV_Misc_Coin_04.blp" />
-						<PushedTexture file="Interface\ICONS\INV_Misc_Coin_02.blp" />
-						<Scripts>
-							<OnClick>
-								SOTA_ShareBossDKP();
-							</OnClick>
-							<OnEnter>
-								SOTA_ShowDashboardToolTip(this, "Share DKP across Raid and Queue");
-							</OnEnter>
-							<OnLeave>
-								SOTA_HideDashboardToolTip(this);
-							</OnLeave>
-						</Scripts>
-					</Button>
 				</Frames>
 				<Layers>
 					<Layer level="ARTWORK">
 						<FontString inherits="GameFontNormal" text="SOTA Master:">
-							s
 							<Anchors>
 								<Anchor point="LEFT">
 									<Offset>
