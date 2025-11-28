@@ -1035,14 +1035,15 @@ end
 
 
 function SOTA_ShareBossDKP()
-	local bossDkp = "".. (SOTA_GetMinimumBid() * 10);
+	-- local bossDkp = "".. (SOTA_GetMinimumBid() * 10);
 	
 	if SOTA_CanDoDKP(true) then		
 		StaticPopupDialogs["SOTA_POPUP_SHARE_DKP"] = {
-			text = "Share the following DKP across raid:",
+			-- text = "Share the following DKP across raid:",
+			text = "Add the following DKP to raid:",
 			hasEditBox = true,
 			maxLetters = 6,
-			button1 = "Share",
+			button1 = "Add",
 			button2 = "Cancel",
 			OnAccept = function() SOTA_ExcludePlayerFromTransaction(SOTA_selectedTransactionID, playername)  end,
 			timeout = 0,
@@ -1051,7 +1052,9 @@ function SOTA_ShareBossDKP()
 			preferredIndex = 3,			
 			OnShow = function()	
 				local c = getglobal(this:GetName().."EditBox");
-				c:SetText(bossDkp);
+				-- c:SetText(bossDkp);
+				c:SetText("");
+				c:SetFocus();
 			end,
 			OnAccept = function(self, data)
 				local c = getglobal(this:GetParent():GetName().."EditBox");			
@@ -1065,7 +1068,8 @@ end
 function SOTA_ShareSelectedBossDKP(text)
 	local dkp = tonumber(text);
 	if dkp then
-		SOTA_Call_ShareDKP(dkp);
+		-- SOTA_Call_ShareDKP(dkp);
+		SOTA_Call_AddRaidDKP(dkp);
 	end
 end
 
