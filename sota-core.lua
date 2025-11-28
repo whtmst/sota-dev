@@ -85,6 +85,7 @@ SOTA_MSG_On8SecondsLeft		= "On8SecondsLeft";
 SOTA_MSG_On7SecondsLeft		= "On7SecondsLeft";
 SOTA_MSG_On6SecondsLeft		= "On6SecondsLeft";
 SOTA_MSG_On5SecondsLeft		= "On5SecondsLeft";
+SOTA_MSG_On5SecondsLeftNoBid		= "On5SecondsLeftNoBid";
 SOTA_MSG_On4SecondsLeft		= "On4SecondsLeft";
 SOTA_MSG_On3SecondsLeft		= "On3SecondsLeft";
 SOTA_MSG_On2SecondsLeft		= "On2SecondsLeft";
@@ -116,12 +117,12 @@ SOTA_MSG_OnDKPReplaced		= "OnDKPReplaced";
 
 --	Settings (persisted)
 -- Pane 1:
-SOTA_CONFIG_AuctionTime			= 20
-SOTA_CONFIG_AuctionExtension	= 8
+SOTA_CONFIG_AuctionTime			= 30
+SOTA_CONFIG_AuctionExtension	= 15
 SOTA_CONFIG_EnableOSBidding		= 1;	-- Enable MS bidding over OS
 SOTA_CONFIG_EnableZoneCheck		= 1;	-- Enable zone check when doing raid queue DKP
 SOTA_CONFIG_EnableOnlineCheck	= 1;	-- Enable online check when doing raid queue DKP
-SOTA_CONFIG_AllowPlayerPass     = 1;	-- 0: No pass, 1: can pass latest bid
+SOTA_CONFIG_AllowPlayerPass     = 0;	-- 0: No pass, 1: can pass latest bid
 SOTA_CONFIG_DisableDashboard	= 0;	-- Disable Dashboard in UI (hide it)
 SOTA_CONFIG_OutputChannel		= WARN_CHANNEL;
 SOTA_CONFIG_Messages			= { }	-- Contains configurable raid messages (if any)
@@ -132,18 +133,18 @@ SOTA_CONFIG_VersionDate			= nil;	-- Date of last change!
 -- Pane 2:
 SOTA_CONFIG_BossDKP				= { }
 local SOTA_CONFIG_DEFAULT_BossDKP = {
-	{ "20Mans",			200 },
+	{ "20Mans",			400 },
 	{ "MoltenCore",		600 },
 	{ "Onyxia",			600 },
 	{ "BlackwingLair",	600 },
-	{ "AQ40",			800 },
-	{ "Naxxramas",		1200 },
+	{ "AQ40",			600 },
+	{ "Naxxramas",		600 },
 	{ "WorldBosses",	400 }
 }
 -- Pane 3:
 SOTA_CONFIG_Modified			= false;	-- If TRUE, then config number has been updated; FALSE: not.
 SOTA_CONFIG_UseGuildNotes		= 0;
-SOTA_CONFIG_MinimumBidStrategy	= 1;	-- 0: No strategy, 1: +10 DKP, 2: +10 %, 3: GGC rules, 4: DejaVu rules, 5: Custom rules
+SOTA_CONFIG_MinimumBidStrategy	= 3;	-- 0: No strategy, 1: +10 DKP, 2: +10 %, 3: GGC rules, 4: DejaVu rules, 5: Custom rules
 SOTA_CONFIG_DKPStringLength		= 5;
 SOTA_CONFIG_MinimumDKPPenalty	= 50;	-- Minimum DKP withdrawn when doing percent DKP
 -- History: (basically a copy of the transaction log, but not shared with others)

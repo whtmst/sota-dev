@@ -29,6 +29,9 @@ local RaidState					= RAID_STATE_DISABLED
 local AuctionedItemLink			= ""
 local AuctionState				= STATE_NONE
 
+-- Новый ключ для анонса "5 seconds left" когда нет ставок:
+local SOTA_MSG_On5SecondsLeftNoBid     = "On5SecondsLeftNoBid"
+
 
 
 function SOTA_GetSecondCounter()
@@ -175,8 +178,21 @@ local SOTA_MSG_AUCTION_cancelled			= "AUCTION_cancelled";
 				SOTA_EchoEvent(SOTA_MSG_On6SecondsLeft, AuctionedItemLink);
 			end
 			if secs == 5 then
-				--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_On5SecondsLeft, AuctionedItemLink));
-				SOTA_EchoEvent(SOTA_MSG_On5SecondsLeft, AuctionedItemLink);
+				-- 1. Получаем данные о текущей высшей ставке
+				local highestBid = SOTA_GetHighestBid();
+				
+				if highestBid then
+					-- highestBid = { Name, DKP, BidType, Class, RankName, RankIndex }
+					local name = highestBid[1]
+					local amount = highestBid[2]
+					local rank = highestBid[5]
+					
+					-- 2. Вызываем EchoEvent с правильными аргументами: item, dkp, bidder, rank
+					SOTA_EchoEvent(SOTA_MSG_On5SecondsLeft, AuctionedItemLink, amount, name, rank);
+				else
+					-- Если ставок нет, отправляем сообщение без данных о ставке
+					SOTA_EchoEvent(SOTA_MSG_On5SecondsLeftNoBid, AuctionedItemLink);
+				end
 			end
 			if secs == 4 then
 				--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_On4SecondsLeft, AuctionedItemLink));

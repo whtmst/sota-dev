@@ -250,14 +250,14 @@
 	</Frame>
 
 	<!-- Boss DKP slider (config element for Boss DKP)  -->
-	<Slider name="SOTA_BossDKPSlider" minValue="0" maxValue="4000" defaultValue="400" valueStep="100" inherits="OptionsSliderTemplate" virtual="true">
+	<Slider name="SOTA_BossDKPSlider" minValue="0" maxValue="5000" valueStep="100" inherits="OptionsSliderTemplate" virtual="true">
 		<Size>
 			<AbsDimension x="300" y="14" />
 		</Size>
 		<Scripts>
 			<OnLoad>
 				getglobal(this:GetName().."Low"):SetText("0")
-				getglobal(this:GetName().."High"):SetText("4000")
+				getglobal(this:GetName().."High"):SetText("5000")
 			</OnLoad>
 			<OnValueChanged>
 				SOTA_OnOptionBossDKPChanged(this);
@@ -336,7 +336,7 @@
 	<!-- Auction Timer, nominal time -->
 	<Frame name="FrameConfigBidding" parent="UIParent" toplevel="true" hidden="true" inherits="SOTA_ConfigurationFrameTemplate">
 		<Frames>
-			<Slider name="$parentAuctionTime" minValue="0" maxValue="60" defaultValue="25" valueStep="1" inherits="OptionsSliderTemplate">
+			<Slider name="$parentAuctionTime" minValue="0" maxValue="60" valueStep="1" inherits="OptionsSliderTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset x="64" y="-124"/>
@@ -356,7 +356,7 @@
 				</Scripts>
 			</Slider>
 			<!-- Auction Extension time -->
-			<Slider name="$parentAuctionExtension" minValue="0" maxValue="20" defaultValue="8" valueStep="1" inherits="OptionsSliderTemplate">
+			<Slider name="$parentAuctionExtension" minValue="0" maxValue="20" valueStep="1" inherits="OptionsSliderTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset x="64" y="-156"/>
@@ -633,7 +633,7 @@
 			</CheckButton>
 			-->
 			<!-- DKP String Length, options: 0-8 -->
-			<Slider name="$parentDKPStringLength" minValue="0" maxValue="8" defaultValue="5" valueStep="1" inherits="OptionsSliderTemplate">
+			<Slider name="$parentDKPStringLength" minValue="0" maxValue="8" valueStep="1" inherits="OptionsSliderTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset x="64" y="-312"/>
@@ -653,7 +653,7 @@
 				</Scripts>
 			</Slider>
 			<!-- Minimum DKP Penalty, options: 0 - 500, step 10 -->
-			<Slider name="$parentMinimumDKPPenalty" minValue="0" maxValue="500" defaultValue="50" valueStep="10" inherits="OptionsSliderTemplate">
+			<Slider name="$parentMinimumDKPPenalty" minValue="0" maxValue="500" valueStep="10" inherits="OptionsSliderTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset x="64" y="-356"/>
