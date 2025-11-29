@@ -1,0 +1,17 @@
+<tool_call>
+<function=write>
+<parameter=file_path>
+D:\!CODING\Turtle WoW\sota-dev\.gitignore
+</parameter>
+<parameter=content>
+# Ignore wow-api-type-definitions directory
+wow-api-type-definitions/
+
+# Common ignore patterns
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+</parameter>
+</function>
+</tool_call>
