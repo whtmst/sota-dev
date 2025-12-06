@@ -243,6 +243,7 @@ function SOTA_HandlePlayerBid(sender, message)
 	local playerInfo = SOTA_GetGuildPlayerInfo(sender);
 	if not playerInfo then
 		SOTA_whisper(sender, "You need to be in the guild to do bidding!");
+		-- The sender of the message was not in the raid; must be a normal whisper.
 		return;
 	end
 
@@ -261,6 +262,7 @@ function SOTA_HandlePlayerBid(sender, message)
 		return;
 	end	
 
+	-- Default is MS - if OS bidding is enabled, check bidtype:
 	local bidtype = nil;
 	
 	if SOTA_CONFIG_EnableOSBidding == 1 then
@@ -369,14 +371,22 @@ function SOTA_HandlePlayerBid(sender, message)
 	
 	if userWentAllIn then
 		if bidtype == 2 then
+    		--publicEcho(string.format("%s went all in (%d) Off-spec for %s", sender, dkp, AuctionedItemLink));
+    		--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnOffspecMaxBid, AuctionedItemLink, dkp, sender, bidderRank));
 			SOTA_EchoEvent(SOTA_MSG_OnOffspecMaxBid, AuctionedItemLink, dkp, sender, bidderRank);
 		else
+    		--publicEcho(string.format("%s (%s) went all in (%d DKP) for %s", sender, bidderRank, dkp, AuctionedItemLink));
+    		--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnMainspecMaxBid, AuctionedItemLink, dkp, sender, bidderRank));
 			SOTA_EchoEvent(SOTA_MSG_OnMainspecMaxBid, AuctionedItemLink, dkp, sender, bidderRank);
 		end;
 	else
 		if bidtype == 2 then
+    		--publicEcho(string.format("%s is bidding %d Off-spec for %s", sender, dkp, AuctionedItemLink));
+    		--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnOffspecBid, AuctionedItemLink, dkp, sender, bidderRank));
 			SOTA_EchoEvent(SOTA_MSG_OnOffspecBid, AuctionedItemLink, dkp, sender, bidderRank);
 		else
+    		--publicEcho(string.format("%s (%s) is bidding %d DKP for %s", sender, bidderRank, dkp, AuctionedItemLink));
+    		--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnMainspecBid, AuctionedItemLink, dkp, sender, bidderRank));
 			SOTA_EchoEvent(SOTA_MSG_OnMainspecBid, AuctionedItemLink, dkp, sender, bidderRank);
 		end;
 	end;
