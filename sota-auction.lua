@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 --	SotA - State of the Art DKP Addon
 --	By Mimma <VanillaGaming.org>
 --
@@ -238,18 +238,17 @@ end
 --[[
 --	Handle incoming bid request.
 --	Syntax: /sota bid|ms|os <dkp>|min|max
---	Since 0.0.1
 --]]
 function SOTA_HandlePlayerBid(sender, message)
 	local playerInfo = SOTA_GetGuildPlayerInfo(sender);
 	if not playerInfo then
 		SOTA_whisper(sender, "You need to be in the guild to do bidding!");
+		-- The sender of the message was not in the raid; must be a normal whisper.
 		return;
 	end
 
 	local unitId = SOTA_GetUnitIDFromGroup(sender);
 	if not unitId then
-		-- The sender of the message was not in the raid; must be a normal whisper.
 		return;
 	end
 
@@ -273,22 +272,21 @@ function SOTA_HandlePlayerBid(sender, message)
 		end
 	end
 
-	local minimumBid = SOTA_GetMinimumBid(bidtype);
-	if not minimumBid then
-		SOTA_whisper(sender, "You cannot OS bid if an MS bid is already made.");
-		return;
-	end
+	-- Проверяем "max" ДО расчёта minimumBid
+	local isMaxBid = (arg == "max");
+	local dkp = tonumber(arg);
 	
-	--echo(string.format("Min.Bid=%d for bidtype=%s", minimumBid, bidtype));
-	
-	local dkp = tonumber(arg)	
 	if not dkp then
 		if arg == "min" then
+			local minimumBid = SOTA_GetMinimumBid(bidtype);
+			if not minimumBid then
+				SOTA_whisper(sender, "You cannot OS bid if an MS bid is already made.");
+				return;
+			end
 			dkp = minimumBid;
-		elseif arg == "max" then
+		elseif isMaxBid then
 			dkp = availableDkp;
 		else
-			-- This was not following a legal format; skip message
 			return;
 		end
 	end	
@@ -298,9 +296,9 @@ function SOTA_HandlePlayerBid(sender, message)
 		return;
 	end	
 
-	dkp = 1 * dkp
+	dkp = 1 * dkp;
 
-	local userWentAllIn = false;
+	local userWentAllIn = isMaxBid;
 	local highestBid = SOTA_GetHighestBid(bidtype);
 
 	local hiRankIndex = 0;
@@ -310,12 +308,10 @@ function SOTA_HandlePlayerBid(sender, message)
 		hiRankIndex = highestBid[6];
 	end;
 
-
-
 	local bidderClass = playerInfo[3];		-- Info for the player placing the bid.
 	local bidderRank  = playerInfo[4];		-- This rank is by NAME
 	local bidderRIdx  = playerInfo[7];		-- This rank is by NUMBER!
-	
+			
 	-- Check bidding using Custom Bidding Strategy.
 	-- This does currently NOT check the min. bid, but it handles player ranks.
 	--[[
@@ -339,27 +335,35 @@ function SOTA_HandlePlayerBid(sender, message)
 	end;
 	--]]
 
-
-	-- Check user at least did bid more than last bidder:
-	if(dkp > hiBid) then
-		-- He did, but he also bid less than the minimum DKP:
-		if (availableDkp < dkp) then
-			-- If he doesnt have enough DKP, then let him go all out:
-			if(availableDkp < minimumBid) and (availableDkp > hiBid) then
-				dkp = availableDkp;
-				userWentAllIn = true;
-			else
-				SOTA_whisper(sender, string.format("У вас только %d DKP - ставка не засчитана.", availableDkp));
-				return;
-			end;
-		end
+	-- Проверка: ставка должна быть выше текущей
+	if not (dkp > hiBid) then
+		SOTA_whisper(sender, string.format("Ваша ставка должна быть больше текущей (%d DKP).", hiBid));
+		return;
 	end;
 
-	if not(userWentAllIn) and (dkp < minimumBid) then
-		SOTA_whisper(sender, string.format("Вам нужно сделать ставку не менее %s DKP - ставка не засчитана.", minimumBid));
-		return;
+	-- Если НЕ all-in, проверяем minimumBid по стратегии
+	if not userWentAllIn then
+		local minimumBid = SOTA_GetMinimumBid(bidtype);
+		if not minimumBid then
+			SOTA_whisper(sender, "You cannot OS bid if an MS bid is already made.");
+			return;
+		end
+
+		if dkp < minimumBid then
+			SOTA_whisper(sender, string.format("Вам нужно сделать ставку не менее %s DKP - ставка не засчитана.", minimumBid));
+			return;
+		end
 	end
 
+	-- Проверка наличия достаточного DKP
+	if (availableDkp < dkp) then
+		if userWentAllIn then
+			dkp = availableDkp;
+		else
+			SOTA_whisper(sender, string.format("У вас только %d DKP - ставка не засчитана.", availableDkp));
+			return;
+		end
+	end
 
 	if Seconds < SOTA_CONFIG_AuctionExtension then
 		Seconds = SOTA_CONFIG_AuctionExtension;
@@ -367,22 +371,22 @@ function SOTA_HandlePlayerBid(sender, message)
 	
 	if userWentAllIn then
 		if bidtype == 2 then
-			--publicEcho(string.format("%s went all in (%d) Off-spec for %s", sender, dkp, AuctionedItemLink));
-			--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnOffspecMaxBid, AuctionedItemLink, dkp, sender, bidderRank));
+    		--publicEcho(string.format("%s went all in (%d) Off-spec for %s", sender, dkp, AuctionedItemLink));
+    		--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnOffspecMaxBid, AuctionedItemLink, dkp, sender, bidderRank));
 			SOTA_EchoEvent(SOTA_MSG_OnOffspecMaxBid, AuctionedItemLink, dkp, sender, bidderRank);
 		else
-			--publicEcho(string.format("%s (%s) went all in (%d DKP) for %s", sender, bidderRank, dkp, AuctionedItemLink));
-			--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnMainspecMaxBid, AuctionedItemLink, dkp, sender, bidderRank));
+    		--publicEcho(string.format("%s (%s) went all in (%d DKP) for %s", sender, bidderRank, dkp, AuctionedItemLink));
+    		--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnMainspecMaxBid, AuctionedItemLink, dkp, sender, bidderRank));
 			SOTA_EchoEvent(SOTA_MSG_OnMainspecMaxBid, AuctionedItemLink, dkp, sender, bidderRank);
 		end;
 	else
 		if bidtype == 2 then
-			--publicEcho(string.format("%s is bidding %d Off-spec for %s", sender, dkp, AuctionedItemLink));
-			--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnOffspecBid, AuctionedItemLink, dkp, sender, bidderRank));
+    		--publicEcho(string.format("%s is bidding %d Off-spec for %s", sender, dkp, AuctionedItemLink));
+    		--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnOffspecBid, AuctionedItemLink, dkp, sender, bidderRank));
 			SOTA_EchoEvent(SOTA_MSG_OnOffspecBid, AuctionedItemLink, dkp, sender, bidderRank);
 		else
-			--publicEcho(string.format("%s (%s) is bidding %d DKP for %s", sender, bidderRank, dkp, AuctionedItemLink));
-			--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnMainspecBid, AuctionedItemLink, dkp, sender, bidderRank));
+    		--publicEcho(string.format("%s (%s) is bidding %d DKP for %s", sender, bidderRank, dkp, AuctionedItemLink));
+    		--publicEcho(SOTA_getConfigurableMessage(SOTA_MSG_OnMainspecBid, AuctionedItemLink, dkp, sender, bidderRank));
 			SOTA_EchoEvent(SOTA_MSG_OnMainspecBid, AuctionedItemLink, dkp, sender, bidderRank);
 		end;
 	end;
@@ -390,7 +394,6 @@ function SOTA_HandlePlayerBid(sender, message)
 
 	SOTA_RegisterBid(sender, dkp, bidtype, bidderClass, bidderRank, bidderRIdx);
 	
-		
 	-- Checks to perform now:
 	-- * Do user have enough DKP?	(Done)
 	-- * Do user bid <minimum dkp>? (Done)
@@ -404,7 +407,7 @@ function SOTA_HandlePlayerBid(sender, message)
 
 
 	-- TODO:
-	-- Hide incoming whispers for local player (how?)		
+	-- Hide incoming whispers for local player (how?)	
 end
 
 
@@ -889,5 +892,3 @@ function SOTA_OnBidClick(object)
 
 	SOTA_ShowSelectedPlayer(bidder, bid);
 end
-
-
