@@ -147,6 +147,18 @@ function SOTA_HandleSOTACommand(msg)
 		cmd = msg;
 	end
 	
+	--	Command: silent
+	--	Syntax: "silent"
+	if cmd == "silent" then
+		if SOTA_CONFIG_SilentBidding == 1 then
+			SOTA_CONFIG_SilentBidding = 0;
+			localEcho("Тихий режим ОТКЛЮЧЕН. Аддон будет подтверждать все ставки через личные сообщения.");
+		else
+			SOTA_CONFIG_SilentBidding = 1;
+			localEcho("Тихий режим ВКЛЮЧЕН. Аддон не будет подтверждать все ставки через личные сообщения.");
+		end
+		return;
+	end
 
 	--	Command: rule
 	--	Syntax: "rule"
@@ -425,6 +437,7 @@ function SOTA_DisplayHelp()
 	echo("  Config    Open the SotA configuration screen.");
 	echo("  Log    Open the SotA transaction log screen.");
 	echo("  Master    Request SotA master status.");
+	echo("  Silent    Toggle silent bidding mode (suppress whisper confirmations).");
 	echo("  <item>    Start an auction for <item>.");
 	echo("  Version    Display the SotA client version.");
 	echo("  Help    (default) This help!");

@@ -120,6 +120,7 @@ SOTA_MSG_OnDKPReplaced		= "OnDKPReplaced";
 SOTA_CONFIG_AuctionTime			= 30
 SOTA_CONFIG_AuctionExtension	= 15
 SOTA_CONFIG_EnableOSBidding		= 1;	-- Enable MS bidding over OS
+SOTA_CONFIG_SilentBidding       = 1;    -- 1 = без уведомлений, 0 = с уведомлениями
 SOTA_CONFIG_EnableZoneCheck		= 1;	-- Enable zone check when doing raid queue DKP
 SOTA_CONFIG_EnableOnlineCheck	= 1;	-- Enable online check when doing raid queue DKP
 SOTA_CONFIG_AllowPlayerPass     = 0;	-- 0: No pass, 1: can pass latest bid

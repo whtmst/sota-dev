@@ -273,6 +273,9 @@ function SOTA_InitializeConfigSettings()
 	if not SOTA_CONFIG_MinimumDKPPenalty then
 		SOTA_CONFIG_MinimumDKPPenalty = 50;
 	end
+    if not SOTA_CONFIG_SilentBidding then
+        SOTA_CONFIG_SilentBidding = 1; -- По умолчанию 1 (тихий режим)
+    end
 
 	-- Update GUI:
 	if not SOTA_CONFIG_EnableOSBidding then

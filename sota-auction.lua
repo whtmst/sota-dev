@@ -413,11 +413,14 @@ end
 
 
 function SOTA_RegisterBid(playername, bid, bidtype, playerclass, rankname, rankindex)
-	if bidtype == 2 then
-		SOTA_whisper(playername, string.format("Вы поставили на ОС %d DKP - ставка принята.", bid) );
-	else
-		SOTA_whisper(playername, string.format("Вы поставили %d DKP - ставка принята.", bid) );
-	end
+    -- ДОБАВЛЕНА ПРОВЕРКА SOTA_CONFIG_SilentBidding
+    if SOTA_CONFIG_SilentBidding == 0 then
+        if bidtype == 2 then
+            SOTA_whisper(playername, string.format("Вы поставили на ОС %d DKP - ставка принята.", bid) );
+        else
+            SOTA_whisper(playername, string.format("Вы поставили %d DKP - ставка принята.", bid) );
+        end
+    end
 
 	IncomingBidsTable = SOTA_RenumberTable(IncomingBidsTable);
 	
